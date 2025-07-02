@@ -1,0 +1,31 @@
+# Python/virtualenv
+.env/
+*.env
+*.pyc
+env/
+venv/
+bin/
+
+# SQLite database files
+pygoat/db.sqlite3
+*.sqlite3
+*db.sqlite3*
+
+# Log files
+*.log
+app.log
+
+# VS Code settings
+.vscode/
+
+# Terraform state & generated files
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+
+# Terraform local working dir & provider lockfile
+.terraform/
+.terraform.lock.hcl
