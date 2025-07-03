@@ -31,7 +31,7 @@ App will be available at `http://localhost:5000`
 
 - [x] Clone base PyGoat app
 - [x] Add pytest and basic test cases
-- [o] Integrate CI pipeline (GitHub Actions)
+- [ ] Integrate CI pipeline (GitHub Actions)
 - [ ] Add Bandit or Semgrep for static analysis
 - [ ] Dockerize and push image
 - [ ] Simulate deployments to staging/production
