@@ -12,7 +12,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -29,7 +29,7 @@ jobs:
         pytest
 
   sast:
-    name: SAST Scan with SonarCloud
+    name: SAST Scan with SonarQube Cloud
     runs-on: ubuntu-latest
 
     steps:
@@ -42,10 +42,10 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@v2
+    - name: SonarQube Cloud Scan
+      uses: SonarSource/sonarqube-scan-action@master
       with:
-        project-key: 'LowerParchment_PyGoat-CICD-Project'
-        organization: 'lowerparchment'
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        args: >
+          -Dsonar.projectKey=LowerParchment_PyGoat-CICD-Project
+          -Dsonar.host.url=https://sonarcloud.io/project/overview?id=LowerParchment_PyGoat-CICD-Project
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
