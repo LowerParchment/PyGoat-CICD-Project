@@ -7,6 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
+  # Build and Test
   test:
     runs-on: ubuntu-latest
 
@@ -28,6 +29,7 @@ jobs:
       run: |
         pytest
 
+  # Static Analysis and Code Quality 
   sast:
     name: SAST Scan with SonarQube Cloud
     runs-on: ubuntu-latest
@@ -52,3 +54,32 @@ jobs:
           -Dsonar.host.url=https://sonarcloud.io
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # Docker Image Scan
+  docker_scan:
+    name: Docker Image Scan with Trivy
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image for PyGoat
+      run: |
+        docker build -t pygoat:latest .
+
+    - name: Install Trivy
+      run: |
+        sudo apt-get install wget apt-transport-https gnupg lsb-release -y
+        wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+        echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+        sudo apt-get update
+        sudo apt-get install trivy -y
+
+    - name: Scan Docker image with Trivy
+      run: |
+        trivy image --severity CRITICAL,HIGH pygoat:latest
